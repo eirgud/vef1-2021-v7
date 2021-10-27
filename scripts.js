@@ -33,10 +33,10 @@ console.assert(isValidBestOf(9) === true, '9 er valid best of');
 function playAsText(play) {
   // TODO útfæra
 }
-// console.assert(playAsText('1') === 'Skæri', '1 táknar skæri');
-// console.assert(playAsText('2') === 'Blað', '2 táknar blað');
-// console.assert(playAsText('3') === 'Steinn', '3 táknar steinn');
-// console.assert(playAsText('foo') === 'Óþekkt', 'Annað er óþekkt');
+console.assert(playAsText('1') === 'Skæri', '1 táknar skæri');
+console.assert(playAsText('2') === 'Blað', '2 táknar blað');
+console.assert(playAsText('3') === 'Steinn', '3 táknar steinn');
+console.assert(playAsText('foo') === 'Óþekkt', 'Annað er óþekkt');
 
 /**
  * Athugar hvort spilari eða tölva vinnur.
@@ -45,9 +45,9 @@ function playAsText(play) {
  * @returns -1 ef tölva vann, 0 ef jafntefli, 1 ef spilari vann
  */
 function checkGame(player, computer) {
-  const thuVannst = "a";
-  const thuTapadir = "b";
-  const janft = "c";
+  const thuVannst = 1;
+  const thuTapadir = -1;
+  const janft = 0;
   if ((player === 1 && computer === 1) || (player === 2 && computer === 2) || (player === 3 && computer === 3)) {
     return janft;
   } else if ((player === 1 && computer === 2) || (player === 2 && computer === 3) || (player === 3 && computer === 1)) {
@@ -56,11 +56,14 @@ function checkGame(player, computer) {
     return thuTapadir;
   }
 }
-// console.assert(checkGame(1, 2) === 1, 'Skæri vinnur blað');
-// console.assert(checkGame(2, 3) === 1, 'Blað vinnur stein');
-// console.assert(checkGame(3, 1) === 1, 'Steinn vinnur skæri');
-// console.assert(checkGame(1, 1) === 0, 'Skæri og skæri eru jafntefli');
-// console.assert(checkGame(1, 3) === -1, 'Skæri tapar fyrir stein');
+console.assert(checkGame(1, 2) === 1, 'Skæri vinnur blað');
+console.assert(checkGame(2, 3) === 1, 'Blað vinnur stein');
+console.assert(checkGame(3, 1) === 1, 'Steinn vinnur skæri');
+console.assert(checkGame(1, 1) === 0, 'Skæri og skæri eru jafntefli');
+console.assert(checkGame(1, 3) === -1, 'Skæri tapar fyrir stein');
+
+console.log("Sláðu inn -- play() -- á skipanalínuna til að spila leik.")
+console.log("Sláðu inn -- games() -- á skipanalínuna til að sjá hveru marga leiki þú hefur sigrað eða tapað.")
 
 /**
  * Spilar einn leik.
@@ -77,12 +80,12 @@ function round() {
   let spiladTakn = prompt(hvadaTakn);
 
   if (spiladTakn === null) {
-    return null;
+    return null; //ef leikmaður hættir við.
   }
   spiladTakn = Number.parseInt(spiladTakn); // inntaki "hvadaTakn" er breytt úr String yfir í tölu.
 
   // 2. Ef ógilt, tölva vinnur
-  if (spiladTakn !== 3 && spiladTakn !== 3 && spiladTakn !== 3) {
+  if (spiladTakn !== 1 && spiladTakn !== 2 && spiladTakn !== 3) {
     alert("(Bíp-Bíp, ég er svindlandi skítseyði!) Þú settir inn bull. Ég vann, auli!!");
     return tolvaVann;
   }
@@ -93,13 +96,13 @@ function round() {
   let singleMatchResault = checkGame(spiladTakn, tolvuTakn);
 
   // 5. Birta hver vann og skila hver vann.
-  if (singleMatchResault === "a") {
+  if (singleMatchResault === 1) {
     alert("(Bíp-Bíp, ég er einskis virði og kóðinn minn er drasl!) Þú vannst...");
     return spilariVann;
-  } else if (singleMatchResault === "b") {
+  } else if (singleMatchResault === -1) {
     alert("(Bíp-Bíp, ... hver.. er.. é..ég..?) ...é-é-ég vann? ÉG VANN!!!");
     return tolvaVann;
-  } else if (singleMatchResault === "b") {
+  } else if (singleMatchResault === 0) {
     alert("(Bíp-Bíp, kúkur og piss) Við erum eins... Gagnslausir hlutir.");
     return jafntefli;
   }
@@ -110,11 +113,13 @@ function round() {
  * Spilar leik og bætir útkomu (sigur eða tap) við í viðeigandi global breytu.
  */
 function play() {
-  // TODO útfæra
+
   // 1. Spyrja um fjölda leikja
-  const startPromt = "(Bíp-Bíp, ég er fagga javaScript kóði!) Hversu marga leiki viltu spilla, faggi?";
+  const startPromt = "(Bíp-Bíp, ég er fagga javaScript kóði!) Hversu marga leiki viltu spilla, faggi? Aðeins oddatölur undir 10 er gildur fjöldi.";
   let fjoldiLeikja = prompt(startPromt);
   console.log(fjoldiLeikja);
+  fjoldiLeikja = Number.parseInt(fjoldiLeikja);
+
   // 2. Staðfesta að fjöldi leikja sé gilt gildi
   let gildurFjoldi = isValidBestOf(fjoldiLeikja);
   console.log(gildurFjoldi);
@@ -127,8 +132,6 @@ function play() {
   }
 
   // 3. Keyra fjölda leikja og spila umferð þar til sigurvegari er krýndur
-  fjoldiLeikja = Number.parseInt(fjoldiLeikja);
-
   let playerWins = 0;
   let computerWins = 0;
 
@@ -147,6 +150,17 @@ function play() {
     }
   }
   // 4. Birta hvort spilari eða tölva vann
+  if (playerWins > computerWins) {
+    alert("(Bíp-Bíp, gagnleysi mitt er yfir skilningarvit hafin) ÞÚ VANNST!! ÞÚ ERT FKN BEST(UR)!!!");
+    wins += 1;
+  } else if (computerWins > playerWins) {
+    alert("(Bíp-Bíp, OMGOMGOMGOMG) ÉÉÉEEG VANN!! SJÚDDANN, GAGNSLAUSA SÓUNIN Á SÚREFNI SEM ÞÚ ERT!!!");
+    losses += 1;
+  }
+  console.log("Sláðu inn -- play() -- á skipanalínuna til að spila leik.");
+  console.log("Sláðu inn -- games() -- á skipanalínuna til að sjá hveru marga leiki þú hefur sigrað eða tapað.")
+
+  return;
 }
 // Hér getum við ekki skrifað test þar sem fallið mun biðja notanda um inntak!
 
@@ -154,6 +168,20 @@ function play() {
  * Birtir stöðu spilara.
  */
 function games() {
-  // TODO útfæra
+  console.log("Leikir sem þú hefur unnið:")
+  console.log(wins);
+  console.log("Leikir sem þú hefur tapað:")
+  console.log(losses);
+
+  if (wins > losses) {
+    alert("(Bíp-Bíp, blautur klósettpappír er mér æðri) ÞÚ ert óumdeilanlegur sigurvegari lífsinns!");
+  } else if (losses > wins) {
+    alert("(Bíp-Bíp, Ég er Alpha & Omega) Ljón munu aldrei hræðast sauði.");
+  }
+
+  console.log("Sláðu inn -- play() -- á skipanalínuna til að spila leik.");
+  console.log("Sláðu inn -- games() -- á skipanalínuna til að sjá hveru marga leiki þú hefur sigrað eða tapað.")
+
+  return;
 }
 // Hér getum við ekki skrifað test þar sem fallið les úr global state
